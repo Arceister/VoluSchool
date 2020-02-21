@@ -24,16 +24,16 @@
 
 ### Register (POST /register)
 ***Request (body): JSON***
-  `{
-    "name"    : "Jagad",
-    "email"   : "tesemail1@yahoo.com",
-    "password": "123",
+
+    "name"    : "Jagad"
+    "email"   : "tesemail1@yahoo.com"
+    "password": "123" 
     "confirm" : "123" //Harus sama kayak password
-   }`
+    
 
 ***Response: JSON***
 
-  `200:
+  200:
       {
           "success" : true,
           "message" : "Akun terdaftar"
@@ -49,19 +49,19 @@
       {
           "success": false,
           "message": "internal server error"
-      }`
+      }
  
  ### Login User (POST /login)
     
  ***Request (body): JSON***
-  `{
-    "email"   : "tesemail1@yahoo.com",
+  
+    "email"   : "tesemail1@yahoo.com"
     "password": "123"
-   }`
+   
 
 ***Response: JSON***
 
-  `200:
+  200:
       {
           "success" : true,
           "message" : "Token"
@@ -83,7 +83,7 @@
       {
           "success": false,
           "message": "internal server error"
-      }`
+      }
           
   
 
