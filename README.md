@@ -35,20 +35,20 @@
 
   200:
       {
-          "success" : true,
+          "success" : true
           "message" : "Akun terdaftar"
       }
    
    409:
       {
-          "success" : false,
+          "success" : false
           "message" : "email already registered / password information incorrect"
       }
    
    500:
       {
-          "success": false,
-          "message": "internal server error"
+          "success" : false
+          "message" : "internal server error"
       }
  
  ### Login User (POST /login)
@@ -63,26 +63,26 @@
 
   200:
       {
-          "success" : true,
+          "success" : true
           "message" : "Token"
       }
       
    403:
       {
-          "success" : false,
+          "success" : false
           "message" : "Belum terdaftar"
       }
    
    409:
       {
-          "success" : false,
+          "success" : false
           "message" : "Password salah"
       }
    
    500:
       {
-          "success": false,
-          "message": "internal server error"
+          "success" : false
+          "message" : "internal server error"
       }
           
   
