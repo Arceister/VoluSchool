@@ -33,19 +33,19 @@
 
 ***Response: JSON***
 
-  200:
+    200:
       {
           "success" : true
           "message" : "Akun terdaftar"
       }
    
-   409:
+    409:
       {
           "success" : false
           "message" : "email already registered / password information incorrect"
       }
    
-   500:
+    500:
       {
           "success" : false
           "message" : "internal server error"
@@ -61,25 +61,54 @@
 
 ***Response: JSON***
 
-  200:
+    200:
       {
           "success" : true
           "message" : "Token"
       }
       
-   403:
+    403:
       {
           "success" : false
           "message" : "Belum terdaftar"
       }
    
-   409:
+    409:
       {
           "success" : false
           "message" : "Password salah"
       }
    
-   500:
+    500:
+      {
+          "success" : false
+          "message" : "internal server error"
+      }
+      
+      
+### Verify User (POST /verif)
+***Request (headers): (Required) Authorization: Bearer <JWT_TOKEN>***    
+***Request (body): JSON***
+  
+    "nohp"  : "081294113439"
+    "noktp" : "2175293102333123"
+   
+
+***Response: JSON***
+
+    200:
+      {
+          "success" : true
+          "message" : "Verif Sukses"
+      }
+   
+    409:
+      {
+          "success" : false
+          "message" : "Sudah diverify"
+      }
+   
+    500:
       {
           "success" : false
           "message" : "internal server error"
