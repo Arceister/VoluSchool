@@ -113,7 +113,17 @@
           "success" : false
           "message" : "internal server error"
       }
-          
+
+## Donasi (/don)
+### Tes Donasi (Masih belum sempurna) (POST /don)
+***Request (body): JSON*** 
+<Masih pake Bruteforce>
+    
+    "id_user"   :   1
+    "id_sch"    :   1
+    "nominal"   :   Integer
+    "metode"    :   String
+    "anonim"    :   boolean
   
 
 
