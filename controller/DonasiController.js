@@ -13,7 +13,9 @@ const diskStorage = multer.diskStorage({
 const upload = multer({
     storage: diskStorage
 })
-var namae
+var namae //Anonim setter
+var need //Butuh
+var colleted //Yang terkumpul
 var terkumpul = 0
 
 const uangSekolah = async (req, res, next) => {
@@ -48,25 +50,37 @@ const uangSekolah = async (req, res, next) => {
         })
 }
 
-const donasiUang = (req, res, next) => {
-    const idusr = req.user.id_user
-    const idsch = req.params.id
+const donasiUang = (req, res, next) => { //MasihError
+    const idusr = req.body.id
+    const ark = parseInt(idusr)
+    const idsch = req.body.idsc
     const donasi = req.body.nominal
     const metode = req.body.metode
     const anonim = req.body.anonim
-    if (anonim === true) {
+    if (anonim == true) {
         namae = "Anonim"
-    } else if (anonim === false) {
-        db.query('select name from `user` where id = ?',[idusr], (err, result, fields) => {
+    } else if (anonim == false) {
+        var userr = 'SELECT name FROM `user` WHERE id = 26';
+        db.query(userr, (err, result, fields) => {
+            if (err) throw err
             namae = result[0].name
         })
     }
-    db.query('update sekolahuang set terkumpul = terkumpul + ?', [donasi])
+    db.query('select * from `sekolahuang` where id = 1', (err, result, fields) => {
+        if (err) throw err
+        need = parseInt(result[0].butuh)
+        colleted = parseInt(result[0].terkumpul)
+    })
+    var needed = need-colleted
+    //if (donasi < needed) {
+        db.query('update sekolahuang set terkumpul = terkumpul + ?', [donasi])
         .then(() => {
+            console.log(idusr)
+            console.log(namae)
             db.query('insert into `history`(id_user,id_sekolah,nominal,metode,penyumbang) values(?,?,?,?,?)', [idusr, idsch, donasi, metode, namae])
             res.json({
                 "success": true,
-                "message": "Anjay kedaftar dong"
+                "message": "Anjay kedaftar dong" + need + colleted
             })
         })
         .catch((err) => {
@@ -75,9 +89,13 @@ const donasiUang = (req, res, next) => {
                 "error": err
             })
         })
+    /*}
+    else {
+        res.status(406)
+        const error = new Error("Donasi terlalu banyak")
+        next(error)
+    } */
 }
-
-
 
 const don = {
     upload,
