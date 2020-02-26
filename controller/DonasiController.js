@@ -60,8 +60,8 @@ const donasiUang = (req, res, next) => { //MasihError
     if (anonim == true) {
         namae = "Anonim"
     } else if (anonim == false) {
-        var userr = 'SELECT name FROM `user` WHERE id = 26';
-        db.query(userr, (err, result, fields) => {
+        var userr = 'SELECT name FROM `user` WHERE id = ?';
+        db.query(userr, [idusr], (err, result, fields) => {
             if (err) throw err
             namae = result[0].name
         })
@@ -75,7 +75,6 @@ const donasiUang = (req, res, next) => { //MasihError
     //if (donasi < needed) {
         db.query('update sekolahuang set terkumpul = terkumpul + ?', [donasi])
         .then(() => {
-            console.log(idusr)
             console.log(namae)
             db.query('insert into `history`(id_user,id_sekolah,nominal,metode,penyumbang) values(?,?,?,?,?)', [idusr, idsch, donasi, metode, namae])
             res.json({
