@@ -50,29 +50,26 @@ const uangSekolah = async (req, res, next) => {
         })
 }
 
-const donasiUang = (req, res, next) => { //MasihError
-    const idusr = req.body.id
-    const ark = parseInt(idusr)
-    const idsch = req.body.idsc
+const donasiUang = (req, res, next) => {
+    const idusr = req.user.id_user
+    const idsch = req.params.id
     const donasi = req.body.nominal
     const metode = req.body.metode
     const anonim = req.body.anonim
     if (anonim == true) {
         namae = "Anonim"
     } else if (anonim == false) {
-        var userr = 'SELECT name FROM `user` WHERE id = ?';
-        db.query(userr, [idusr], (err, result, fields) => {
-            if (err) throw err
+        db.query(`SELECT name FROM user WHERE id = ${idusr}`, (err, result, fields) => {
             namae = result[0].name
         })
     }
-    db.query('select * from `sekolahuang` where id = 1', (err, result, fields) => {
+    db.query(`select * from sekolahuang where id = ${idsch}`, (err, result, fields) => {
         if (err) throw err
         need = parseInt(result[0].butuh)
         colleted = parseInt(result[0].terkumpul)
     })
     var needed = need-colleted
-    //if (donasi < needed) {
+    if (donasi < needed) {
         db.query('update sekolahuang set terkumpul = terkumpul + ?', [donasi])
         .then(() => {
             console.log(namae)
@@ -88,12 +85,12 @@ const donasiUang = (req, res, next) => { //MasihError
                 "error": err
             })
         })
-    /*}
+    }
     else {
         res.status(406)
         const error = new Error("Donasi terlalu banyak")
         next(error)
-    } */
+    }
 }
 
 const don = {

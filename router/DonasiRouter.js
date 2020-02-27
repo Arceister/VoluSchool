@@ -5,6 +5,6 @@ const {checkToken} = require('../middleware')
 //Mendaftarkan Sekolah
 router.post('/sekoldon',donasiController.upload.single('myFile') ,donasiController.uangSekolah)
 
-router.post('/dona/',donasiController.donasiUang)
+router.post('/dona/:id',checkToken, donasiController.donasiUang)
 
 module.exports = router
