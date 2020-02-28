@@ -23,51 +23,6 @@ const upload = multer({
     storage: diskStorage
 })
 
-const tesVerifikasi = async (req, res, next) => {
-    if (req.file) {
-        console.log('Uploading file...')
-        var filename = req.file.filename
-        var uploadStatus = 'File Uploaded Succesfully'
-    } else {
-        console.log('No file uploaded')
-        var filename = 'FILE NOT UPLOADED'
-        var uploadStatus = 'File Upload Failed'
-    }
-    const ktp = req.body.noktp
-    const image = "resource/images/" + filename
-    const worker = createWorker({
-        logger: m => console.log(m)
-    });
-
-    (async () => {
-        await worker.load();
-        await worker.loadLanguage('eng');
-        await worker.initialize('eng');
-        const {
-            data: {
-                text
-            }
-        } = await worker.recognize(image);
-        if (text.includes(ktp)) {
-            await db.query('update user set ktp = ?, image = ? where id = 31', [ktp, image]) //685272368
-                .then(() => {
-                    res.json({
-                        "success": "true",
-                        "message": "berhasil upload",
-                        status: uploadStatus,
-                        filename: `Name Of File: ${filename}`
-                    })
-                }).catch((err) => {
-                    console.log(err)
-                    next(err)
-                })
-        } else {
-            console.log(text)
-        }
-        await worker.terminate();
-    })();
-}
-
 const getAllUser = async (req, res, next) => {
     try {
         const [rows] = await db.query('select * from user')
@@ -81,8 +36,20 @@ const getAllUser = async (req, res, next) => {
 }
 
 const registerUser = async (req, res, next) => {
+    if (req.file) {
+        console.log('Uploading file...')
+        var filename = req.file.filename
+        var uploadStatus = 'File Uploaded Succesfully'
+    } else {
+        console.log('No file uploaded')
+        var filename = 'FILE NOT UPLOADED'
+        var uploadStatus = 'File Upload Failed'
+    }
     const name = req.body.name
     const email = req.body.email
+    const nohp = req.body.nohp
+    const ktp = req.body.noktp
+    const image = "resource/images/" + filename
     const isEmail = validator.isEmail(email)
     if (isEmail) {
         const [rows] = await db.query('select * from user where email = ? limit 1', [email])
@@ -92,23 +59,45 @@ const registerUser = async (req, res, next) => {
             const isPassword = validator.equals(confPassword, password)
             if (isPassword) {
                 const hashedpassword = await bcrypt.hash(password, 11)
-                db.query('insert into user(name, email, password, verif) values (?,?,?,1)', [name, email, hashedpassword])
-                    .then(() => {
-                        res.json({
-                            "Success": true,
-                            "Message": "Akun terdaftar"
-                        })
-                    })
-                    .catch((err) => {
-                        res.status(500)
-                        res.json({
-                            "Success": false,
-                            "error": err
-                        })
-                    })
+                const worker = createWorker({
+                    logger: m => console.log(m)
+                });
+                (async () => {
+                    await worker.load();
+                    await worker.loadLanguage('eng');
+                    await worker.initialize('eng');
+                    const {
+                        data: {
+                            text
+                        }
+                    } = await worker.recognize(image);
+                    if (text.includes(ktp)) {
+                        await db.query('insert into user(name, email, password, hp, ktp, image) values (?,?,?,?,?,?)', [name, email, hashedpassword, nohp, ktp, image])
+                            .then(() => {
+                                res.json({
+                                    "success": "true",
+                                    "message": "berhasil upload",
+                                    status: uploadStatus,
+                                    filename: `Name Of File: ${filename}`
+                                })
+                            }).catch((err) => {
+                                res.json({
+                                    "success": false,
+                                    "error": err
+                                })
+                                next(err)
+                            })
+                    } else {
+                        res.status(406)
+                        console.log(text)
+                        const error = new Error("NO KTP tidak sesuai")
+                        next(error)
+                    }
+                    await worker.terminate();
+                })();
             } else {
                 res.status(409)
-                const error = new Error("Password Confirmation Incorrect")
+                const error = new Error("Password Confirmation Incorrect") //712804129846
                 next(error)
             }
         } else {
@@ -157,18 +146,27 @@ const getUserById = async (req, res, next) => {
     const currid = req.user.id_user
     const id = req.params.id
     if (currid == id) {
-        const [rows] = await db.query("select * from user where id = ?", [id])
+        const [rows] = await db.query("select name, email, hp, ktp from user where id = ?", [id])
         if (rows.length > 0) {
-            res.json({
-                "success": true,
-                "user": rows[0]
-            })
+            const [hist] = await db.query("select * from history where id_user = ? and TRIM(penyumbang) = Anonim", [id])
+            if (hist.length > 0) {
+                res.json({
+                    "success": true,
+                    "user": rows[0],
+                    "history": hist
+                })
+            } else {
+                res.json({
+                    "success": true,
+                    "user": rows[0]
+                })
+            }
         } else {
             const error = new Error("User not Found")
             next(error)
         }
     } else {
-        const [rows] = await db.query("select name, email from user where id = ?", [id])
+        const [rows] = await db.query("select name from user where id = ?", [id])
         if (rows.length > 0) {
             res.json({
                 "success": true,
@@ -179,23 +177,6 @@ const getUserById = async (req, res, next) => {
             next(error)
         }
     }
-}
-
-const updateUserName = (req, res, next) => {
-    const id = req.params.id
-    const newName = req.body.name
-    db.query('update user set name = ? where id = ?', [newName, id])
-        .then(() => {
-            res.json({
-                "success": true,
-                "message": "Change name success"
-            })
-        })
-        .catch(() => {
-            res.status(404)
-            const error = new Error("User Not Found")
-            next(error)
-        })
 }
 
 const deleteUser = (req, res, next) => {
@@ -216,12 +197,10 @@ const deleteUser = (req, res, next) => {
 
 const userController = {
     upload,
-    tesVerifikasi,
     getAllUser,
     registerUser,
     loginUser,
     getUserById,
-    updateUserName,
     deleteUser,
 }
 

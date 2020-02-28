@@ -10,16 +10,10 @@ router.get('/', userController.getAllUser)
 router.get('/:id', checkToken, userController.getUserById)
 
 //daftar user
-router.post('/register', userController.registerUser)
-
-//verif tes
-router.post('/ver', userController.upload.single('myFile'), userController.tesVerifikasi)
+router.post('/register',userController.upload.single('myFile'), userController.registerUser)
 
 //login
 router.post('/login', userController.loginUser)
-
-//update user
-router.post('/:id', userController.updateUserName)
 
 //delete user
 router.delete('/:id', userController.deleteUser)

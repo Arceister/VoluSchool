@@ -89,6 +89,8 @@ const volunRec = (req, res, next) => {
                             status: uploadStatus,
                             filename: `Name of file: ${filename}`
                         })
+                        console.log(coll)
+                        console.log(neded)
                     })
                     .catch((err) => {
                         res.json({
