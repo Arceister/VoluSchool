@@ -214,27 +214,6 @@ const deleteUser = (req, res, next) => {
         })
 }
 
-const updateSaldo = (req, res, next) => {
-    const saldo = req.body.saldo
-    db.query('select saldo from saldo where id_user = 1', function (err, result, fields) {
-        const sql = result[0].saldo
-        const sal = parseInt(sql)
-        const temp = saldo + sal
-        db.query('update saldo set saldo = ? where id_user = 1', [temp])
-            .then(() => {
-                res.json({
-                    "success": true,
-                    "message": "Saldo ditambahkan"
-                })
-            })
-            .catch(() => {
-                res.status(404)
-                const error = new Error("Gatau error kenapa")
-                next(error)
-            })
-    })
-}
-
 const userController = {
     upload,
     tesVerifikasi,
@@ -244,7 +223,6 @@ const userController = {
     getUserById,
     updateUserName,
     deleteUser,
-    updateSaldo
 }
 
 module.exports = userController

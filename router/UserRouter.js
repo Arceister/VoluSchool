@@ -18,9 +18,6 @@ router.post('/ver', userController.upload.single('myFile'), userController.tesVe
 //login
 router.post('/login', userController.loginUser)
 
-//updatesaldo
-router.post('/saldo', userController.updateSaldo)
-
 //update user
 router.post('/:id', userController.updateUserName)
 
