@@ -8,7 +8,7 @@
 - password: String(100)
 - hp: String(15)
 - ktp: String(16)
-- image: Integer
+- image: String
 
 ## History:
 - id: Integer
