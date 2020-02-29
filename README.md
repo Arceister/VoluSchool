@@ -8,8 +8,7 @@
 - password: String(100)
 - hp: String(15)
 - ktp: String(16)
-- verif: Integer
-
+- image: Integer
 
 ## History:
 - id: Integer
@@ -18,6 +17,35 @@
 - nominal: Integer
 - metode: String(20)
 - penyumbang: String(100)
+
+## Historyvol (History Volunteer):
+- id: Integer
+- id_user: Integer
+- id_sekolah: Integer
+
+## Sekolahuang (Membuka Donasi):
+- id: Integer
+- sekolah: String(100)
+- butuh: Integer //Jumlah yang dibutuhkan
+- terkumpul: Integer ///Jumlah yang terkumpul
+- image: String(50) //Letak image
+- deskripsi: String (255)
+
+## Sekolahvol (Membuka Donasi Volunteer):
+- id: Integer
+- sekolah: String(150)
+- lokasi: String(130)
+- jumlah: Integer
+- deskripsi: String
+- image: String(255)
+- terkumpul: Integer
+
+## Volun
+- id_sekolah: Integer
+- nama: String(50)
+- ttl: String(40)
+- pekerjaan: String(70)
+- image: String(200)
 
 # ENDPOINT
 ## User (/user)
