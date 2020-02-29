@@ -114,16 +114,15 @@
           "message" : "internal server error"
       }
 
-## Donasi (/don)
-### Tes Donasi (Masih belum sempurna) (POST /don)
+## Donasi (/donasi)
+### Bikin Donasi Baru (POST /sekoldon)
 ***Request (body): JSON*** 
-<Masih pake Bruteforce>
     
-    "id_user"   :   1
-    "id_sch"    :   1
-    "nominal"   :   Integer
-    "metode"    :   String
-    "anonim"    :   boolean
+    "sekolah"   :   String
+    "butuh"     :   Integer
+    "deskripsi" :   String
+    "image"     :   boolean
+    jangan lupa bikin kolom upload
   
 
 
