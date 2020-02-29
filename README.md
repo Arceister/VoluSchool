@@ -124,8 +124,36 @@
     "sekolah"   :   String
     "butuh"     :   Integer
     "deskripsi" :   String
-    "image"     :   boolean
+    "myFile"    :   upload image   
     jangan lupa bikin kolom upload
+    
+### Donasi (POST /dona/:id)
+***Request (body): JSON***
+***Request Header (authorization) //kudu login***
+***Request params.id*** (Sekolah)
+
+    "anonim"    :   boolean
+    "nominal"   :   Integer
+    "metode"    :   String (BCA/BNI,dsb)
+    
+## Volunteer (/volun)
+### Bikin recruitment Volunteer (POST /daftar)
+***Request (body): JSON***
+
+    "myFile"    :   upload image
+    "sekolah"   :   SMPN 1 Malang
+    "lokasi"    :   Malang Selatan
+    "desc"      :   SMP ini terletak di Pedalaman
+    "jumlah"    :   3 //Jumlah volunteer yang dibutuhkan
+    
+### Volunteer Regist (POST /daftar)
+***Request (body): JSON***
+
+    "cvUp"      :   upload image
+    "nama"      :   Jagad
+    "ttl"       :   Jakarta, 12 Maret 2001
+    "pekerjaan" :   Mahasiswa
+    
     
     
   
