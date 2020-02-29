@@ -55,8 +55,11 @@
 
     "name"    : "Jagad"
     "email"   : "tesemail1@yahoo.com"
-    "password": "123" 
-    "confirm" : "123" //Harus sama kayak password
+    "password": 123 
+    "confirm" : 123 //Harus sama kayak password
+    "nohp"    : 0812941122222
+    "noktp"   : 102324134131414
+    "myFile:  : (upload image)
     
 
 ***Response: JSON***
@@ -113,34 +116,6 @@
           "message" : "internal server error"
       }
       
-      
-### Verify User (POST /verif)
-***Request (headers): (Required) Authorization: Bearer <JWT_TOKEN>***    
-***Request (body): JSON***
-  
-    "nohp"  : "081294113439"
-    "noktp" : "2175293102333123"
-   
-
-***Response: JSON***
-
-    200:
-      {
-          "success" : true
-          "message" : "Verif Sukses"
-      }
-   
-    409:
-      {
-          "success" : false
-          "message" : "Sudah diverify"
-      }
-   
-    500:
-      {
-          "success" : false
-          "message" : "internal server error"
-      }
 
 ## Donasi (/donasi)
 ### Bikin Donasi Baru (POST /sekoldon)
@@ -151,6 +126,8 @@
     "deskripsi" :   String
     "image"     :   boolean
     jangan lupa bikin kolom upload
+    
+    
   
 
 
