@@ -3,7 +3,7 @@ const userController = require('../controller/UserController')
 const {checkToken} = require('../middleware')
 //info: menghandle semua request dari /user
 //get semua user
-router.get('/', userController.getAllUser)
+router.get('/alluser', userController.getAllUser)
 
 //get salah satu user
 //kalo login id sama = keliatan semua, kalo engga = cuman nama sama email

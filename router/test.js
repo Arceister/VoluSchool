@@ -1,15 +1,13 @@
 const router = require('express').Router()
 const userRouter = require('./UserRouter')
-const postRouter = require('./PostRouter')
 const donasiRouter = require('./DonasiRouter')
 const volunteerRouter = require('./VolunteerRouter')
 
-/*router.get('/', (req,res) => {
-    res.send('BCC in Glory')
-})*/
+router.get('/', (req,res) => {
+    res.send('Bismillah BCC')
+})
 
 router.use('/user', userRouter)
-router.use('/post', postRouter)
 router.use('/donasi', donasiRouter)
 router.use('/volun', volunteerRouter)
 router.use(notFound)

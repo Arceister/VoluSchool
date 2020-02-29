@@ -148,12 +148,26 @@ const getUserById = async (req, res, next) => {
     if (currid == id) {
         const [rows] = await db.query("select name, email, hp, ktp from user where id = ?", [id])
         if (rows.length > 0) {
-            const [hist] = await db.query("select * from history where id_user = ? and TRIM(penyumbang) = Anonim", [id])
-            if (hist.length > 0) {
+            const [hist] = await db.query("select * from history where id_user = ?", [id])
+            const [histvol] = await db.query("select * from historyvol where id_user = ?", [id])
+            if (hist.length > 0 && histvol.length > 0) {
+                res.json({
+                    "success": true,
+                    "user": rows[0],
+                    "history": hist,
+                    "volunteer": histvol
+                })
+            } else if (hist.length > 0) {
                 res.json({
                     "success": true,
                     "user": rows[0],
                     "history": hist
+                })
+            } else if (histvol.length > 0) {
+                res.json({
+                    "success": true,
+                    "user": rows[0],
+                    "histvol": histvol
                 })
             } else {
                 res.json({
@@ -168,10 +182,33 @@ const getUserById = async (req, res, next) => {
     } else {
         const [rows] = await db.query("select name from user where id = ?", [id])
         if (rows.length > 0) {
-            res.json({
-                "success": true,
-                "user": rows[0]
-            })
+            const [hist] = await db.query("select * from history where id_user = ? and penyumbang <> 'Anonim'", [id])
+            const [histvol] = await db.query("select * from historyvol where id_user = ?", [id])
+            if (hist.length > 0 && histvol.length > 0) {
+                res.json({
+                    "success": true,
+                    "user": rows[0],
+                    "history": hist,
+                    "volunteer": histvol
+                })
+            } else if (hist.length > 0) {
+                res.json({
+                    "success": true,
+                    "user": rows[0],
+                    "history": hist
+                })
+            } else if (histvol.length > 0) {
+                res.json({
+                    "success": true,
+                    "user": rows[0],
+                    "histvol": histvol
+                })
+            } else {
+                res.json({
+                    "success": true,
+                    "user": rows[0]
+                })
+            }
         } else {
             const error = new Error("User not Found")
             next(error)

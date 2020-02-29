@@ -69,6 +69,7 @@ const volunRec = (req, res, next) => {
         var filename = 'FILE NOT UPLOADED'
         var uploadStatus = 'File Upload Failed'
     }
+    const idusr = req.user.id_user
     const sekolah = req.params.id
     const nama = req.body.nama
     const ttl = req.body.ttl
@@ -83,14 +84,21 @@ const volunRec = (req, res, next) => {
             .then(() => {
                 db.query("update sekolahvol set terkumpul = terkumpul + 1 where id = ?", [sekolah])
                     .then(() => {
-                        res.json({
-                            "success": true,
-                            "message": nama + "berhasil didaftarkan" + coll + neded,
-                            status: uploadStatus,
-                            filename: `Name of file: ${filename}`
+                        db.query("insert into `historyvol`(id_user,id_sekolah) values(?,?)", [idusr,sekolah])
+                        .then(() => {
+                            res.json({
+                                "success": true,
+                                "message": nama + " berhasil didaftarkan" + coll + neded,
+                                status: uploadStatus,
+                                filename: `Name of file: ${filename}`
+                            })
                         })
-                        console.log(coll)
-                        console.log(neded)
+                        .catch((err) => {
+                            res.json({
+                                "success": false,
+                                "error": err
+                            })
+                        })
                     })
                     .catch((err) => {
                         res.json({
@@ -114,15 +122,6 @@ const volunRec = (req, res, next) => {
         const error = new Error("Volunteer sudah mencukupi")
         next(error)
     }
-    /*await db.query('insert into `volun`(id_sekolah, nama, ttl, pekerjaan, image) values(?,?,?,?,?)',[sekolah,nama,ttl,pekerjaan,image])
-    .then(() => {
-        res.json({
-            "success": true,
-            "message": `${nama} berhasil didaftarkan`,
-            status: uploadStatus,
-            filename: `Name of file: ${filename}`
-        })
-    })*/
 }
 
 const vokun = {

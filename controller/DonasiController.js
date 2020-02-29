@@ -76,7 +76,7 @@ const donasiUang = (req, res, next) => {
             db.query('insert into `history`(id_user,id_sekolah,nominal,metode,penyumbang) values(?,?,?,?,?)', [idusr, idsch, donasi, metode, namae])
             res.json({
                 "success": true,
-                "message": "Anjay kedaftar dong" + need + colleted
+                "message": "Anjay kedaftar dong"
             })
         })
         .catch((err) => {
